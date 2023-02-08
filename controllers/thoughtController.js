@@ -9,6 +9,7 @@ module.exports = {
   },
   getSingleThought(req, res) {
     Thoughts.findOne({ _id: req.params.thoughtId })
+      .populate("reactions")
       .then((thought) =>
         !thought
           ? res.status(404).json({ message: "No thought with that ID" })
@@ -74,7 +75,7 @@ module.exports = {
           },
         },
       },
-      { new: true }
+      { runValidators: true, new: true }
     )
       .then((thought) =>
         !thought
@@ -88,8 +89,8 @@ module.exports = {
   removeReaction(req, res) {
     Thoughts.findByIdAndUpdate(
       { _id: req.params.thoughtId },
-      { $pull: { reactions: { reactionId: req.params.reactionId } } },
-      { new: true }
+      { $pull: { reactions: { _id: req.params.reactionId } } },
+      { runValidators: true, new: true }
     )
       .then((thought) =>
         !thought

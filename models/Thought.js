@@ -1,5 +1,7 @@
 const { Schema, Types, model } = require("mongoose");
 
+const { Users } = require("../models");
+
 const reactionSchema = new Schema({
   reactionId: {
     type: Types.ObjectId,
@@ -35,11 +37,7 @@ const thoughtSchema = new Schema(
       type: String,
       required: true,
     },
-    reactions: [
-      {
-        reactions: [reactionSchema],
-      },
-    ],
+    reactions: [reactionSchema],
   },
   {
     toJSON: {
@@ -50,6 +48,13 @@ const thoughtSchema = new Schema(
 
 thoughtSchema.virtual("reactionCount").get(function () {
   return this.reactions.length;
+});
+
+thoughtSchema.pre("remove", function () {
+  Users.updateMany(
+    { thoughts: this._id },
+    { $pull: { thoughts: this._id } }
+  ).exec();
 });
 
 const Thoughts = model("Thoughts", thoughtSchema);
