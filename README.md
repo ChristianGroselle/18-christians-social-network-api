@@ -27,7 +27,7 @@ N/A
 
 ---
 
-Walkthrough video:
+Walkthrough video: https://drive.google.com/file/d/1M7UKDN8KwibT_YHx0ogB7TkdTw73j0TC/view
 
 ## Contributing
 
